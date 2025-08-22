@@ -1,0 +1,20 @@
+[project]
+name = "llm-resume-evaluation"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "duyvhb",email = "v.hbaoduy@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "google-generativeai==0.8.5"
+]
+
+[tool.poetry]
+packages = [{include = "llm_resume_evaluation", from = "app"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
