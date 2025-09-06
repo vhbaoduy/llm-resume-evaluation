@@ -16,6 +16,7 @@ class ContentAnalyzer(BaseAgent):
         super().__init__(name=self._NAME, llm=llm)
         self.model = llm
         self.prompt = """
+        
         """
         # self.chain = (
         
