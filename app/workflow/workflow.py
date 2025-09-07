@@ -1,18 +1,19 @@
 import uuid
 from langgraph.graph import StateGraph, START, END
 from langchain.chat_models import init_chat_model
-from agents.sentence_classification import SentenceClassificationAgent
 from workflow.state import State
 
-from agents.evaluation import EvalutionAgent
-from agents.content_parser import ContentAnalyzer
+from agents.evaluation import EvaluationAgent
+from agents.resume_extractor import ResumeExtractor
+from agents.jd_extractor import JDExtractor
+
 
 model = init_chat_model(
     model="gemma-3n-e2b-it", model_provider="google_genai", temperature=0
 )
-SENTENCE_CLASSIFICATION_AGENT = SentenceClassificationAgent(llm=model)
-# CONTENT_ANALYZER_AGENT = ContentAnalyzer(llm=model)
-EVALUATION_AGENT = EvalutionAgent(llm=model)
+RESUME_EXTRACTOR = ResumeExtractor(llm=model)
+EVALUATION_AGENT = EvaluationAgent(llm=model)
+JD_EXTRACTOR = JDExtractor(llm=model)
 
 
 def validate_input(state: State):
@@ -21,13 +22,32 @@ def validate_input(state: State):
 
 
 def parse_content(state: State):
+    _id = str(uuid.uuid4())
+    jd_id = f"jd_{_id}"
+    resume_id = f"resume_{_id}"
+
     jd = state["job_description"]
     resume = state["resume"]
 
-    jd_content = SENTENCE_CLASSIFICATION_AGENT(content=jd)
-    resume_content = SENTENCE_CLASSIFICATION_AGENT(content=resume)
+    extracted_resume = RESUME_EXTRACTOR(
+        content=[
+            {"id": f"resume_{_id}", "value": resume},
+        ]
+    )
+    extracted_jd = JD_EXTRACTOR(
+        content=[
+            {"id": f"jd_{_id}", "value": jd},
+        ]
+    )
+    parsed_jd = None
+    parsed_resume = None
+    if resume_id in extracted_resume:
+        parsed_resume = extracted_resume[resume_id]
 
-    return {"parsed_jd": jd_content, "parsed_resume": resume_content}
+    if jd_id in extracted_jd:
+        parsed_jd = extracted_jd[jd_id]
+
+    return {"parsed_jd": parsed_jd, "parsed_resume": parsed_resume}
 
 
 def evaluate_pair_matching(state: State):
@@ -35,7 +55,7 @@ def evaluate_pair_matching(state: State):
     outputs = EVALUATION_AGENT(
         data=[
             {
-                "data_id": data_id,
+                "id": data_id,
                 "job_description": state["parsed_jd"],
                 "resume": state["parsed_resume"],
             }
@@ -45,8 +65,8 @@ def evaluate_pair_matching(state: State):
     if len(outputs) == 0:
         return state
     result = outputs[0]
-    if result["data_id"] == data_id:
-        result.pop("data_id")
+    if result["id"] == data_id:
+        result.pop("id")
         return {"score": result["score"], "reasoning": result["reasoning"]}
 
 

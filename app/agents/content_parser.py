@@ -1,4 +1,3 @@
-
 import sys
 
 sys.path.append(".")  # Adjust the path as necessary to import from app.agents
@@ -19,14 +18,14 @@ class ContentAnalyzer(BaseAgent):
         
         """
         # self.chain = (
-        
+
     def __call__(self, content: str) -> dict:
         """
         Analyze the content and return a structured response.
-        
+
         Args:
             content (str): The content to analyze.
-        
+
         Returns:
             dict: A structured response containing analysis results.
         """
