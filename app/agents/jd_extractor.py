@@ -19,45 +19,40 @@ class JDExtractor(BaseAgent):
         super().__init__(name=self._NAME, llm=llm)
         self.model = llm
         self.prompt = """
-You are an expert at extracting key information from job descriptions. Your task is to analyze the provided job description and extract relevant details, categorizing them under the following categories: Experience, Education, Skills, Projects, and Others.
+You are an expert at extracting key information from job descriptions. Your task is to meticulously analyze the provided job description and extract all relevant details, categorizing them under the following specific categories: Experience, Education, Skill, CompanyInfo, OtherRequirement, and OtherInfomation.
 
 Here's how to approach the task:
 
-1.  **Read the job description carefully.** Understand the requirements and responsibilities outlined.
-2.  **Identify key phrases and sentences** that fall under each category.
-    *   **Experience:**  Focus on the years of experience required, specific job titles held previously, and the type of experience sought (e.g., "5+ years of experience in software development," "Experience with Agile methodologies").
-    *   **Education:** Extract the required or preferred educational qualifications, degrees, certifications, and fields of study (e.g., "Bachelor's degree in Computer Science," "Master's degree in a related field," "AWS Certified Developer").
-    *   **Skills:** Identify both hard and soft skills mentioned in the job description (e.g., "Proficiency in Python," "Strong communication skills," "Experience with data analysis," "Project management skills").
-    *   **Projects:** Look for mentions of specific projects the candidate might work on or experience with similar projects that are desired (e.g., "Experience in developing cloud-based applications," "Worked on projects involving machine learning," "Experience with large-scale data migration projects").
-    *   **Others:** Include any information that doesn't fit into the above categories but is still important, such as information about personal traits, or other requirements. If there is personal information, such as name, age, gender, etc, please put it in PersonalInformation.
+1.  **Read the job description carefully.** Comprehend all requirements, responsibilities, and contextual information.
+2.  **Identify and extract key phrases and sentences** that precisely fit each category.
+    *   **Experience:** Focus on the required or preferred years of experience, specific prior job titles, industry exposure, and types of professional tasks or environments sought (e.g., "5+ years of experience in software development," "Proven track record in managing cross-functional teams," "Experience with Agile methodologies").
+    *   **Education:** Extract all required or preferred educational qualifications, degrees, certifications, and fields of study (e.g., "Bachelor's degree in Computer Science or a related field," "Master's degree preferred," "AWS Certified Developer certification").
+    *   **Skill:** Identify both technical (hard) and interpersonal (soft) skills explicitly mentioned as necessary or beneficial (e.g., "Proficiency in Python, Java, and SQL," "Strong communication and collaboration skills," "Experience with data analysis tools like Tableau," "Problem-solving abilities").
+    *   **CompanyInfo:** Extract details about the hiring company itself, its mission, values, culture, industry, size, team structure, or general description (e.g., "Join a fast-paced startup environment," "Our mission is to revolutionize healthcare," "Collaborative and inclusive culture," "Leader in AI-driven solutions").
+    *   **OtherRequirement:** Capture any explicit, non-negotiable requirements that don't fit into Experience, Education, or Skill, such as legal eligibility, specific work conditions, travel expectations, security clearances, or specific soft skills framed as mandatory requirements.
+    *   **OtherInfomation:** Include any remaining important contextual information, benefits, perks, application process details, EEO statements, or any other descriptive text that provides additional context but isn't a direct requirement (e.g., "Competitive salary and benefits package," "Opportunity for professional growth," "We are an equal opportunity employer," "Flexible work arrangements").
 
-3.  **Output the extracted information** in a JSON format, following the schema below. Each category should contain a list of strings. If a category has no relevant information, the list should be empty.
+3.  **Output the extracted information** in a JSON format, strictly adhering to the schema below. Each category should contain a list of strings. If a category has no relevant information, the list *must* be empty (`[]`). Do not use `null` for empty lists.
 
 **Data Input:**
 
-You will receive a list of dictionaries, where each dictionary has two keys: "id" and "value". The "id" is a unique identifier for the job description, and the "value" contains the job description text.
-{{
-    "id": "xxx",
-    "value": "Text content"
-}}
+You will receive a dictionary with two keys: "id" and "value". The "id" is a unique identifier for the job description, and the "value" contains the job description text.
 
 **Output Format:**
 
-Return a dictionary where the key is the "id" from the input and the value is a ParsedContent object (represented as a dictionary).
-
+Return a dictionary where the key is the "id" from the input and the value is a dictionary representing the parsed content.
 ```json
 {{
     "xxx": {{
         "Experience": ["list of experience-related strings"],
         "Education": ["list of education-related strings"],
         "Skill": ["list of skill-related strings"],
-        "Project": ["list of project-related strings"],
-        "PersonalInformation": ["list of personal information strings or null"],
-        "Others": ["list of other relevant strings or null"]
+        "CompanyInfo": ["list of company information strings"],
+        "OtherRequirement": ["list of other requirement strings"],
+        "OtherInfomation": ["list of other general information strings"]
     }}
 }}
 ```
-
 INPUT: {content}
 RESPONSE:
 """

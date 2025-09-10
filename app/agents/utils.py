@@ -18,7 +18,7 @@ def extract_json_from_string(text):
             return json.loads(json_string)
         except json.JSONDecodeError as e:
             # Return a detailed error message if parsing fails
-            return {"error": f"Failed to parse JSON: {e}"}
+            return {"error": f"Failed to parse JSON: {e}", "text": text}
     else:
         # Return an error if no JSON block is found
-        return {"error": "No JSON block found"}
+        return {"error": "No JSON block found", "text": text}

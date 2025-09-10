@@ -1,19 +1,20 @@
 from typing_extensions import TypedDict
+from typing import Union
+from pydantic import BaseModel
+from schema.agent import GraphOutput, GraphInput, ParsedContent
 
 
-class State(TypedDict):
+class State(BaseModel):
     """State of the workflow."""
 
     # Input from the user
     # user_input: str
-    job_description: str = None
-    resume: str = None
+    inputs: Union[list[GraphInput], None] = None
 
-    # Immediately
-    parsed_jd: str = None
-    parsed_resume: str = None
+    parsed_contents: Union[list[ParsedContent], None] = None
 
     # Output
-    reasoning: str = None
-    score: float = None
+    results: Union[list[GraphOutput], None] = None
+
+    errors: Union[list[GraphInput], None] = None
     # feedback: str = None
