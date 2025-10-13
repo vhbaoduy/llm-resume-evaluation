@@ -1,7 +1,8 @@
-from typing_extensions import TypedDict
 from typing import Union
+
 from pydantic import BaseModel
-from schema.agent import GraphOutput, GraphInput, ParsedContent
+from schema.agent import GraphInput, GraphOutput, ParsedContent
+from typing_extensions import TypedDict
 
 
 class State(BaseModel):
