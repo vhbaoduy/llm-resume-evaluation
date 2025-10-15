@@ -9,6 +9,8 @@ dependencies = [
     "google-generativeai==0.8.5",
     "uvicorn==0.35.0",
     "fastapi==0.116.1",
+    "pypdf",
+    "python-docx"
 ]
 
 [tool.poetry]

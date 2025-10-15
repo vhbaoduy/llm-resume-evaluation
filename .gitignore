@@ -209,3 +209,5 @@ __marimo__/
 
 data
 .vscode/
+
+*/node_modules
