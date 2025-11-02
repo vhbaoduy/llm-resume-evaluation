@@ -106,15 +106,21 @@ const useMatcher = () => {
   // Initial placeholder content
   useEffect(() => {
     setResumeText(
-      `Experienced professional skilled in Agile, User Stories, medical, Stakeholder Management. 
-They likely much way. 
-Final ball cause meet describe.
-  `
+//       `Experienced professional skilled in Agile, User Stories, medical, Stakeholder Management. 
+// They likely much way. 
+// Final ball cause meet describe.
+//   `
+`Experienced professional skilled in book, SQL, word, Tableau, realize, Data Cleaning. 
+Three purpose safe develop. 
+Research none carry fire wrong.`
     );
     setJdText(
-      `Product Manager needed with experience in Scrum, Product Roadmap, User Stories, Stakeholder Management, Agile. 
-Either thank entire unit nor. 
-Yourself source experience a finally hope. Close while food there can.`
+//       `Product Manager needed with experience in Scrum, Product Roadmap, User Stories, Stakeholder Management, Agile. 
+// Either thank entire unit nor. 
+// Yourself source experience a finally hope. Close while food there can.`
+`Data Analyst needed with experience in Tableau, Power BI, Reporting, Excel. 
+Option conference win coach military offer. 
+Well home improve expect.`
     );
   }, []);
 
