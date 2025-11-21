@@ -29,13 +29,11 @@ npm install
 
 ## Usage
 
-1. Run the demo application: `python demo.py`
+1. Run the demo application
+- Run Python application for LLM: `python app/main.py`
+- Run UI from frontend: `cd frontend` & `npm run dev`
 
 2. Provide the resume and job description as input.
 
 3. The application will evaluate the resume and provide a match score and justification.
 
-## Example
-
-
-# References
